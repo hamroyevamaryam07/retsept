@@ -6,8 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jbsr+aj6^-#p-8xy$90a@(^-&q@gtorkj6&76ik&ej_&u=ld)1'
 
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Ilovalar
