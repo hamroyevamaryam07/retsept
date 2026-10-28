@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin panel | Retseptlar katalogi</title>
+
+    <style>
+        :root {
+            --green: #245b43;
+            --dark-green: #163d2c;
+            --light-green: #eaf2e8;
+            --gold: #d5a253;
+            --cream: #faf8f1;
+            --white: #ffffff;
+            --text: #29382f;
+            --muted: #7b847b;
+            --border: #e5e9df;
+            --red: #b84242;
+            --shadow: 0 12px 35px rgba(30, 65, 43, 0.09);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* Yuqori menyu */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+            padding: 16px 4%;
+            background: var(--dark-green);
+            border-bottom: 3px solid var(--gold);
+            color: white;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .brand-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.13);
+            font-size: 24px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 999px;
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Asosiy qism */
+        .container {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+            padding: 36px 0 50px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+            padding: 32px;
+            border-radius: 22px;
+            color: white;
+            background: linear-gradient(125deg, #163d2c, #34734f);
+            box-shadow: var(--shadow);
+        }
+
+        .hero::after {
+            content: "🍃";
+            position: absolute;
+            top: 4px;
+            right: 28px;
+            font-size: 100px;
+            opacity: 0.13;
+            transform: rotate(-18deg);
+            pointer-events: none;
+        }
+
+        .eyebrow {
+            margin-bottom: 8px;
+            color: #f6d89c;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            position: relative;
+            z-index: 1;
+            margin-bottom: 10px;
+            color: white;
+            font-size: clamp(27px, 4vw, 38px);
+            line-height: 1.25;
+        }
+
+        .hero p {
+            position: relative;
+            z-index: 1;
+            max-width: 650px;
+            color: #e2eee4;
+            font-size: 15px;
+        }
+
+        /* Xabarlar */
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 8px;
+            padding: 13px 16px;
+            border: 1px solid #cfe4c8;
+            border-radius: 11px;
+            background: #edf7e9;
+            color: #245b43;
+            font-weight: 700;
+        }
+
+        /* Statistik kartochkalar */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 27px;
+        }
+
+        .stat-card {
+            padding: 21px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 5px 18px rgba(30, 65, 43, 0.04);
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .stat-icon {
+            display: grid;
+            place-items: center;
+            width: 43px;
+            height: 43px;
+            border-radius: 12px;
+            background: var(--light-green);
+            font-size: 22px;
+        }
+
+        .stat-number {
+            margin-top: 8px;
+            color: var(--dark-green);
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        .stat-note {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Tugmalar */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 11px 16px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            background: var(--green);
+            color: white;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            background: var(--dark-green);
+            color: white;
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #26372d;
+        }
+
+        .btn-gold:hover {
+            background: #e2b767;
+            color: #26372d;
+        }
+
+        /* Retseptlar jadvali */
+        .panel {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(30, 65, 43, 0.04);
+        }
+
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-heading h2 {
+            color: var(--dark-green);
+            font-size: 22px;
+        }
+
+        .panel-heading p {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 680px;
+        }
+
+        thead th {
+            padding: 15px 18px;
+            background: #f7f9f4;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        tbody td {
+            padding: 17px 18px;
+            border-top: 1px solid #f0f1eb;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #fcfdf9;
+        }
+
+        .id-badge {
+            display: inline-block;
+            min-width: 38px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            background: var(--light-green);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .recipe-name {
+            color: var(--dark-green);
+            font-weight: 800;
+        }
+
+        .ingredients {
+            max-width: 300px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+
+        .btn-view {
+            color: #245bb5;
+        }
+
+        .btn-edit {
+            color: #94630b;
+        }
+
+        .btn-delete {
+            color: var(--red);
+        }
+
+        .btn-action:hover {
+            background: #f5f7f2;
+        }
+
+        /* Retseptlar bo‘lmagandagi holat */
+        .empty-state {
+            padding: 48px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            margin-bottom: 10px;
+            font-size: 48px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 7px;
+            color: var(--dark-green);
+            font-size: 22px;
+        }
+
+        .empty-state p {
+            margin-bottom: 18px;
+            color: var(--muted);
+        }
+
+        footer {
+            padding: 25px 12px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center;
+        }
+
+        footer strong {
+            color: var(--green);
+        }
+
+        /* Telefon va planshet uchun */
+        @media (max-width: 760px) {
+            .navbar {
+                padding: 14px 4%;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .container {
+                padding-top: 24px;
+            }
+
+            .hero {
+                padding: 25px 21px;
+            }
+
+            .hero::after {
+                right: 7px;
+                font-size: 70px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 17px;
+            }
+
+            .panel-heading {
+                padding: 18px;
+            }
+
+            .panel-heading h2 {
+                font-size: 19px;
+            }
+        }
+
+        @media (max-width: 440px) {
+            .nav-actions {
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 8px 11px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Yuqori menyu -->
+    <header class="navbar">
+        <a class="brand" href="{% url 'custom_admin_dashboard' %}">
+            <span class="brand-icon">🍲</span>
+            <span>Retseptlar katalogi</span>
+        </a>
+
+        <nav class="nav-actions">
+            <a class="nav-link" href="{% url 'home' %}">
+                🌐 Saytni ko‘rish
+            </a>
+
+            <a class="nav-link" href="{% url 'custom_admin_dashboard' %}">
+                📋 Admin panel
+            </a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <!-- Sarlavha -->
+        <section class="hero">
+            <div class="eyebrow">Administrator bo‘limi</div>
+            <h1>Retseptlar boshqaruvi</h1>
+            <p>
+                Retseptlarni ko‘ring, yangi taom qo‘shing, mavjud retseptlarni
+                tahrirlang yoki o‘chirish sahifasiga o‘ting.
+            </p>
+        </section>
+
+        <!-- Muvaffaqiyat xabarlari -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message">
+                        ✓ {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Statistik kartochkalar -->
+        <section class="stats">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Jami retseptlar</span>
+                    <span class="stat-icon">🍽️</span>
+                </div>
+
+                <div class="stat-number">{{ retseptlar|length }}</div>
+                <div class="stat-note">Bazadagi barcha retseptlar</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Admin panel holati</span>
+                    <span class="stat-icon">🛡️</span>
+                </div>
+
+                <div class="stat-number" style="font-size: 23px;">
+                    Faol
+                </div>
+                <div class="stat-note">Retseptlarni boshqarish bo‘limi</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span>Tezkor amal</span>
+                    <span class="stat-icon">✨</span>
+                </div>
+
+                <div class="stat-note" style="margin: 10px 0 13px;">
+                    Yangi taomni katalogga kiriting
+                </div>
+
+                <a class="btn btn-gold" href="{% url 'recipe_create' %}">
+                    ＋ Yangi retsept qo‘shish
+                </a>
+            </div>
+
+        </section>
+
+        <!-- Retseptlar jadvali -->
+        <section class="panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2>📋 Retseptlar ro‘yxati</h2>
+                    <p>
+                        Har bir retseptni ko‘rish, tahrirlash yoki o‘chirish mumkin.
+                    </p>
+                </div>
+
+                <a class="btn" href="{% url 'recipe_create' %}">
+                    ＋ Retsept qo‘shish
+                </a>
+            </div>
+
+            {% if retseptlar %}
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 75px;">ID</th>
+                                <th>Taom nomi</th>
+                                <th>Masalliqlar</th>
+                                <th style="min-width: 265px; text-align: right;">
+                                    Amallar
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for r in retseptlar %}
+                                <tr>
+                                    <td>
+                                        <span class="id-badge">#{{ r.pk }}</span>
+                                    </td>
+
+                                    <td class="recipe-name">
+                                        {{ r.nom|default:"Nomsiz retsept" }}
+                                    </td>
+
+                                    <td class="ingredients">
+                                        {{ r.masalliqlar|default:"Masalliqlar kiritilmagan"|truncatewords:12 }}
+                                    </td>
+
+                                    <td>
+                                        <div class="actions">
+
+                                            <a
+                                                class="btn-action btn-view"
+                                                href="{% url 'recipe_detail' r.pk %}"
+                                            >
+                                                👁 Ko‘rish
+                                            </a>
+
+                                            <a
+                                                class="btn-action btn-edit"
+                                                href="{% url 'recipe_update' r.pk %}"
+                                            >
+                                                ✏️ Tahrirlash
+                                            </a>
+
+                                            <a
+                                                class="btn-action btn-delete"
+                                                href="{% url 'recipe_delete' r.pk %}"
+                                            >
+                                                🗑 O‘chirish
+                                            </a>
+
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <div class="empty-icon">🥘</div>
+
+                    <h3>Hozircha retseptlar yo‘q</h3>
+
+                    <p>
+                        Birinchi retseptingizni qo‘shishdan boshlang.
+                    </p>
+
+                    <a class="btn" href="{% url 'recipe_create' %}">
+                        ＋ Yangi retsept qo‘shish
+                    </a>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+        <footer>
+            <strong>🍃 Retseptlar katalogi</strong>
+            — Admin boshqaruv paneli
+        </footer>
+
+    </main>
+
+</body>
+</html>

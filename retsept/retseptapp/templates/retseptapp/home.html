@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="uz">
@@ -23,6 +22,8 @@
         <a href="/" class="active">Bosh sahifa</a>
         <a href="#retseptlar">Retseptlar</a>
         <a href="#biz-haqimizda">Biz haqimizda</a>
+        <!-- Shaxsiy admin panelga o‘tish havolasi -->
+        <a href="{% url 'custom_admin_dashboard' %}" style="color: #orange;">Admin Panel</a>
     </nav>
 
     <a class="nav-button" href="#retseptlar">Retseptlarni ko‘rish ↗</a>
@@ -72,12 +73,13 @@
             <p class="section-description">Oson, mazali va sinab ko‘rishga arziydigan taomlar.</p>
         </div>
 
-        <form class="search-form" method="get" action="#retseptlar">
+        <!-- QIDIRUV FORMASI (ACTION '/' GA YO‘NALTIRILDI VA VALUE O‘ZGARUVCHISI MAVJUD VIEW GA MOSLANDI) -->
+        <form class="search-form" method="get" action="/">
             <span class="search-icon">⌕</span>
             <input
                 type="search"
                 name="q"
-                value="{{ qidiruv }}"
+                value="{{ query|default:'' }}"
                 placeholder="Taom nomi yoki masalliqlarni yozing..."
                 aria-label="Retsept qidirish"
             >
@@ -85,25 +87,25 @@
             <input type="hidden" name="tur" value="{{ tanlangan_tur }}">
             {% endif %}
             <button type="submit">Qidirish</button>
-            {% if qidiruv or tanlangan_tur %}
+            {% if query or tanlangan_tur %}
             <a class="clear-search" href="/">Tozalash</a>
             {% endif %}
         </form>
 
         {% if kategoriyalar %}
         <div class="category-list">
-            <a class="category-chip {% if not tanlangan_tur %}selected{% endif %}" href="{% if qidiruv %}/?q={{ qidiruv|urlencode }}#retseptlar{% else %}/#retseptlar{% endif %}">Barchasi</a>
+            <a class="category-chip {% if not tanlangan_tur %}selected{% endif %}" href="{% if query %}/?q={{ query|urlencode }}#retseptlar{% else %}/#retseptlar{% endif %}">Barchasi</a>
             {% for tur_nomi in kategoriyalar %}
             <a class="category-chip {% if tanlangan_tur == tur_nomi %}selected{% endif %}"
-               href="?tur={{ tur_nomi|urlencode }}{% if qidiruv %}&q={{ qidiruv|urlencode }}{% endif %}#retseptlar">
+               href="?tur={{ tur_nomi|urlencode }}{% if query %}&q={{ query|urlencode }}{% endif %}#retseptlar">
                 {{ tur_nomi }}
             </a>
             {% endfor %}
         </div>
         {% endif %}
 
-        {% if qidiruv %}
-        <p class="search-result">“{{ qidiruv }}” bo‘yicha qidiruv natijalari</p>
+        {% if query %}
+        <p class="search-result">“{{ query }}” bo‘yicha qidiruv natijalari</p>
         {% endif %}
 
         <div class="recipe-grid">
@@ -132,12 +134,13 @@
             {% empty %}
             <div class="empty-state">
                 <span>🍲</span>
-                <h3>{% if qidiruv %}Retsept topilmadi{% else %}Hozircha retseptlar yo‘q{% endif %}</h3>
-                <p>{% if qidiruv %}Boshqa so‘z bilan qidirib ko‘ring.{% else %}Administrator panelidan birinchi retseptni qo‘shing.{% endif %}</p>
-                {% if qidiruv %}
+                <h3>{% if query %}Retsept topilmadi{% else %}Hozircha retseptlar yo‘q{% endif %}</h3>
+                <p>{% if query %}Boshqa so‘z bilan qidirib ko‘ring.{% else %}Administrator panelidan birinchi retseptni qo‘shing.{% endif %}</p>
+                {% if query %}
                 <a class="main-button" href="/">Barcha retseptlar</a>
                 {% else %}
-                <a class="main-button" href="/admin/">Retsept qo‘shish →</a>
+                <!-- TAOM QO‘SHISH TUGMASI BIZ YARATGAN SHAXSIY ADMIN PANELGA TO‘G‘RI ULANDI -->
+                <a class="main-button" href="{% url 'recipe_create' %}">Retsept qo‘shish →</a>
                 {% endif %}
             </div>
             {% endfor %}

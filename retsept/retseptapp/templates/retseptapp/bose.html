@@ -1,208 +1,136 @@
-```html
-{% load static %}
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "admin/base_site.html" %}
 
-    <title>{% block title %}Retseptlar katalogi{% endblock %}</title>
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    /* 1. Asosiy fon va matnlar */
+    body {
+        background-color: #f8fafc !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    #content {
+        padding: 30px 40px !important;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #fffaf3;
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+    /* 2. Yuqori Menyu (Header) - To'q Midnight ko'rinishi */
+    #header {
+        background: #0f172a !important;
+        padding: 15px 40px !important;
+        border-bottom: 2px solid #1e293b !important;
+    }
 
-        header {
-            background: #263629;
-            color: white;
-            padding: 18px 5%;
-        }
+    #branding h1 {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        font-size: 1.25rem !important;
+    }
 
-        .navbar {
-            max-width: 1200px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+    #branding h1 a {
+        color: #10b981 !important; /* Emerald Yashil chiroyli nuqta effekti */
+    }
 
-        .logo {
-            color: #ffbd59;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-        }
+    #user-tools {
+        color: #94a3b8 !important;
+    }
 
-        .nav-links {
-            display: flex;
-            gap: 22px;
-            flex-wrap: wrap;
-        }
+    #user-tools a {
+        color: #ffffff !important;
+        border-bottom: 1px solid #10b981 !important;
+    }
 
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+    /* 3. Modullar va Bloklar (Retseptapp, Users) */
+    .module {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        margin-bottom: 30px !important;
+        overflow: hidden !important;
+    }
 
-        .nav-links a:hover {
-            color: #ffbd59;
-        }
+    .module caption, .inline-group h2 {
+        background: #f8fafc !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        font-size: 0.95rem !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        padding: 12px 20px !important;
+    }
 
-        main {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px;
-            flex: 1;
-        }
+    /* 4. Jadvallar va Qatorlar */
+    table thead th {
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.05em !important;
+        padding: 12px 20px !important;
+    }
 
-        /* FOOTER */
-        .site-footer {
-            background: #202820;
-            color: #f5f5f5;
-            padding: 40px 20px 0;
-            margin-top: auto;
-        }
+    form th, form td {
+        padding: 15px 20px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
 
-        .footer-container {
-            max-width: 1150px;
-            margin: auto;
-            display: flex;
-            justify-content: space-between;
-            gap: 35px;
-            flex-wrap: wrap;
-            padding-bottom: 30px;
-        }
+    .row1 { background: #ffffff !important; }
+    .row2 { background: #fafafa !important; }
 
-        .footer-about,
-        .footer-links,
-        .footer-contact {
-            flex: 1;
-            min-width: 220px;
-        }
+    /* 5. Rangli va Zamonaviy Havolalar hamda Tugmalar */
+    .model-recipe a.section, .model-user a.section, .model-group a.section {
+        font-weight: 600 !important;
+        color: #0f172a !important;
+        font-size: 0.95rem !important;
+    }
 
-        .footer-about h2,
-        .site-footer h3 {
-            color: #ffbd59;
-            margin-bottom: 15px;
-        }
+    /* Qo'shish (+) tugmasi - Yorqin Zumrad Rangda */
+    .addlink {
+        color: #10b981 !important;
+        font-weight: 600 !important;
+        background-color: #ecfdf5 !important;
+        padding: 4px 12px !important;
+        border-radius: 6px !important;
+        border: 1px solid #a7f3d0 !important;
+        transition: all 0.2s !important;
+    }
+    .addlink:hover {
+        background-color: #d1fae5 !important;
+    }
 
-        .footer-about h2 {
-            font-size: 22px;
-        }
+    /* O'zgartirish (Qalam) tugmasi - Elegant Amber Rangda */
+    .changelink {
+        color: #d97706 !important;
+        font-weight: 600 !important;
+        background-color: #fffbeb !important;
+        padding: 4px 12px !important;
+        border-radius: 6px !important;
+        border: 1px solid #fef3c7 !important;
+        transition: all 0.2s !important;
+    }
+    .changelink:hover {
+        background-color: #fde68a !important;
+    }
 
-        .site-footer p {
-            color: #d5d5d5;
-            line-height: 1.8;
-        }
+    /* 6. O'ng tomondagi "So'nggi harakatlar" paneli */
+    #content-related {
+        background: #ffffff !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+        padding: 20px !important;
+    }
 
-        .footer-links a {
-            display: block;
-            color: #d5d5d5;
-            text-decoration: none;
-            margin-bottom: 10px;
-        }
+    #content-related h3 {
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        font-size: 1rem !important;
+        margin-bottom: 15px !important;
+    }
 
-        .footer-links a:hover {
-            color: #ffbd59;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #465046;
-            text-align: center;
-            padding: 18px 10px;
-        }
-
-        .footer-bottom p {
-            font-size: 14px;
-        }
-
-        @media (max-width: 600px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-links {
-                gap: 14px;
-            }
-
-            .footer-container {
-                flex-direction: column;
-                gap: 25px;
-            }
-        }
-    </style>
-
-    {% block extra_css %}{% endblock %}
-</head>
-
-<body>
-    <header>
-        <nav class="navbar">
-            <a class="logo" href="/">🍲 Retseptlar katalogi</a>
-
-            <div class="nav-links">
-                <a href="/">Bosh sahifa</a>
-                <a href="/retseptlar/">Retseptlar</a>
-                <a href="/about/">Biz haqimizda</a>
-                <a href="/contact/">Bog‘lanish</a>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-
-    <footer class="site-footer">
-        <div class="footer-container">
-
-            <div class="footer-about">
-                <h2>🍲 Retseptlar katalogi</h2>
-                <p>
-                    Mazali taomlar tayyorlashni biz bilan o‘rganing!
-                    Yangi retseptlar va foydali maslahatlar.
-                </p>
-            </div>
-
-            <div class="footer-links">
-                <h3>Tezkor havolalar</h3>
-                <a href="/">Bosh sahifa</a>
-                <a href="/retseptlar/">Retseptlar</a>
-                <a href="/about/">Biz haqimizda</a>
-                <a href="/contact/">Bog‘lanish</a>
-            </div>
-
-            <div class="footer-contact">
-                <h3>Biz bilan aloqa</h3>
-                <p>📧 Email: info@retseptlar.uz</p>
-                <p>🍽️ Mazali taomlar — baxtli kunlar!</p>
-            </div>
-
-        </div>
-
-        <div class="footer-bottom">
-            <p>© 2026 Retseptlar katalogi. Barcha huquqlar himoyalangan.</p>
-        </div>
-    </footer>
-
-    {% block extra_js %}{% endblock %}
-</body>
-</html>
-```
+    ul.actionlist li {
+        padding: 8px 0 !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+</style>
+{% endblock %}

@@ -506,3 +506,241 @@ img { max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+
+
+/* ===== RETSEPTLAR KATALOGI — ZAMONAVIY DIZAYN ===== */
+
+:root {
+    --green: #245b43;
+    --dark-green: #163d2c;
+    --gold: #d6a64f;
+    --cream: #f8f6ef;
+    --white: #ffffff;
+    --text: #26372e;
+    --muted: #758078;
+    --border: #e5ebe5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* Yuqori menyu */
+nav, header {
+    background: linear-gradient(135deg, #163d2c, #347653);
+    color: white;
+    padding: 22px 35px;
+    box-shadow: 0 4px 18px #173d2b20;
+}
+
+nav a, header a {
+    color: white !important;
+    text-decoration: none;
+    margin-right: 22px;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+nav a:hover, header a:hover {
+    color: #f4d58d !important;
+}
+
+/* Sahifa sarlavhalari */
+h1, h2, h3 {
+    color: var(--dark-green);
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+h1 {
+    margin: 28px 24px;
+    font-size: 30px;
+}
+
+/* Asosiy kontent */
+main, .container, .content {
+    padding: 25px;
+}
+
+/* Jadval */
+table {
+    width: calc(100% - 40px);
+    margin: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--white);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px #244b3810;
+}
+
+thead, th {
+    background: var(--green);
+    color: white;
+}
+
+th {
+    padding: 19px 16px;
+    text-align: center;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+}
+
+td {
+    padding: 19px 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    vertical-align: middle;
+}
+
+tbody tr {
+    transition: background 0.25s, transform 0.25s;
+}
+
+tbody tr:nth-child(even) {
+    background: #f7faf6;
+}
+
+tbody tr:hover {
+    background: #edf5eb;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Havolalar */
+a {
+    color: var(--green);
+    transition: 0.2s;
+}
+
+a:hover {
+    color: #bd8b32;
+}
+
+/* Barcha tugmalar */
+button, .btn, input[type="submit"] {
+    display: inline-block;
+    padding: 10px 19px;
+    border: none;
+    border-radius: 10px;
+    background: var(--green);
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+button:hover, .btn:hover, input[type="submit"]:hover {
+    background: var(--dark-green);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 14px #163d2c30;
+}
+
+/* Yangi retsept tugmasi */
+.btn-success, .btn-primary {
+    background: linear-gradient(135deg, #2c704e, #194832);
+    color: white;
+    border-radius: 25px;
+    padding: 13px 25px;
+}
+
+/* Jadval ichidagi amallar tugmalari */
+td a, td button {
+    display: inline-block;
+    margin: 3px 2px;
+    padding: 9px 14px;
+    border-radius: 9px;
+    border: 1px solid #dce7dc;
+    background: white;
+    color: var(--green);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+td a:hover, td button:hover {
+    background: var(--green);
+    color: white;
+    border-color: var(--green);
+}
+
+/* O'chirish tugmasi */
+td a[href*="delete"],
+td a[href*="ochirish"],
+td button.delete {
+    color: #bd4141;
+}
+
+td a[href*="delete"]:hover,
+td a[href*="ochirish"]:hover,
+td button.delete:hover {
+    background: #bd4141;
+    color: white;
+}
+
+/* Formadagi maydonlar */
+input, select, textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 12px 14px;
+    margin: 7px 0 16px;
+    border: 1px solid #d8e2d8;
+    border-radius: 10px;
+    background: white;
+    color: var(--text);
+    font: inherit;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px #245b431a;
+}
+
+/* Telefon va kichik ekranlar */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+        margin: 20px 14px;
+    }
+
+    main, .container, .content {
+        padding: 12px;
+    }
+
+    table {
+        width: calc(100% - 20px);
+        margin: 10px;
+        font-size: 13px;
+    }
+
+    th, td {
+        padding: 12px 9px;
+    }
+
+    td a, td button {
+        padding: 7px 10px;
+        margin: 3px 0;
+    }
+
+    nav, header {
+        padding: 18px;
+    }
+}

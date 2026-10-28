@@ -1,3 +1,7 @@
-django==6.1.2
-gunicorn==26.2.0
-whitenoise==6.7.0
+<<<<<<< HEAD
+Django==6.1.2
+asgiref==3.13.0
+sqlparse==0.6.0
+tzdata
+whitenoise
+>>>>>>> bfdcabe (Update recipe catalog and admin panel)

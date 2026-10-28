@@ -4,147 +4,636 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Retseptlar katalogi</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
+        :root {
+            --green: #245b43;
+            --dark-green: #163d2c;
+            --light-green: #eaf2e8;
+            --gold: #d5a253;
+            --cream: #faf8f1;
+            --white: #ffffff;
+            --text: #29382f;
+            --muted: #7b847b;
+            --border: #e8e8de;
+            --shadow: 0 12px 35px rgba(30, 65, 43, 0.09);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 30px;
+            padding: 0;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
+        body {
+            font-family: 'Nunito', Arial, sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.7;
         }
 
-        form {
-            margin: 20px 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        input, select, button {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 15px;
-        }
-
-        button {
-            background: #e67e22;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        .add-link {
-            display: inline-block;
-            background: #27ae60;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
+        a {
             text-decoration: none;
-            margin-bottom: 20px;
         }
 
+        /* Yuqori menyu */
+        .navbar {
+            background: var(--dark-green);
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .brand-icon {
+            width: 45px;
+            height: 45px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 14px;
+            font-size: 25px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #f6f5ed;
+            font-size: 14px;
+            font-weight: 700;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* Asosiy qism */
+        .container {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+            padding: 42px 0 60px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 45px;
+            margin-bottom: 32px;
+            border-radius: 25px;
+            color: white;
+            background: linear-gradient(125deg, #163d2c, #34734f);
+            box-shadow: var(--shadow);
+        }
+
+        .hero::after {
+            content: "🍃";
+            position: absolute;
+            right: 45px;
+            top: 8px;
+            font-size: 125px;
+            opacity: .12;
+            transform: rotate(-20deg);
+            pointer-events: none;
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 6px 14px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 30px;
+            color: #f6d89c;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            max-width: 650px;
+            margin-bottom: 12px;
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(30px, 4vw, 45px);
+            line-height: 1.2;
+            color: white;
+        }
+
+        .hero p {
+            max-width: 580px;
+            color: #e2eee4;
+            font-size: 16px;
+        }
+
+        /* Qidiruv */
+        .search-panel {
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 6px 22px rgba(30,65,43,.04);
+        }
+
+        .search-title {
+            margin-bottom: 15px;
+            color: var(--dark-green);
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .search-form {
+            display: grid;
+            grid-template-columns: minmax(180px, 1.5fr) minmax(180px, 1fr) auto;
+            gap: 12px;
+        }
+
+        .field {
+            width: 100%;
+            min-width: 0;
+            padding: 13px 16px;
+            border: 1px solid #dfe5db;
+            border-radius: 11px;
+            outline: none;
+            background: #fcfcf9;
+            color: var(--text);
+            font: inherit;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        .field:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(36,91,67,.1);
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 11px;
+            background: var(--green);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform .2s, background .2s, box-shadow .2s;
+        }
+
+        .btn:hover {
+            background: var(--dark-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(22,61,44,.2);
+        }
+
+        .btn-gold {
+            background: var(--gold);
+            color: #26372d;
+        }
+
+        .btn-gold:hover {
+            background: #e2b767;
+            color: #26372d;
+        }
+
+        /* Ro'yxat sarlavhasi */
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .section-heading h2 {
+            color: var(--dark-green);
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 27px;
+        }
+
+        .section-heading p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* Retsept kartochkalari */
         .recipes {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 25px;
         }
 
         .card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 19px;
             background: white;
-            padding: 18px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px #ddd;
+            box-shadow: 0 5px 20px rgba(30,65,43,.045);
+            transition: transform .25s, box-shadow .25s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow);
+        }
+
+        .image-wrap {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            background: var(--light-green);
         }
 
         .card img {
             width: 100%;
-            height: 180px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 8px;
+            transition: transform .4s;
+        }
+
+        .card:hover img {
+            transform: scale(1.05);
+        }
+
+        .no-image {
+            display: grid;
+            width: 100%;
+            height: 100%;
+            place-items: center;
+            font-size: 65px;
+            background: linear-gradient(135deg, #edf4e9, #f8edcf);
+        }
+
+        .category-badge {
+            display: inline-block;
+            width: fit-content;
+            padding: 5px 12px;
+            border-radius: 30px;
+            background: var(--light-green);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .card-content {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 21px;
+        }
+
+        .card h3 {
+            margin: 12px 0 8px;
+            color: var(--dark-green);
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 22px;
+            line-height: 1.35;
+        }
+
+        .description {
+            display: -webkit-box;
+            overflow: hidden;
+            margin-bottom: 17px;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #f0f0e9;
+        }
+
+        .cooking-time {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .detail-link {
-            color: #d35400;
-            text-decoration: none;
+            color: var(--green);
+            font-size: 13px;
+            font-weight: 800;
+            transition: color .2s;
+        }
+
+        .detail-link:hover {
+            color: #bd8b32;
+        }
+
+        /* Retsept topilmaganda */
+        .empty-state {
+            grid-column: 1 / -1;
+            padding: 55px 20px;
+            border: 1px dashed #cbd8c8;
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+        }
+
+        .empty-state .empty-icon {
+            margin-bottom: 12px;
+            font-size: 55px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+            color: var(--dark-green);
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 24px;
+        }
+
+        .empty-state p {
+            margin-bottom: 20px;
+            color: var(--muted);
+        }
+
+        /* Pastki qism */
+        footer {
+            padding: 25px 5%;
+            border-top: 1px solid #e4e7dc;
+            background: #f1f0e7;
+            color: var(--muted);
+            text-align: center;
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: var(--green);
+        }
+
+        /* Planshet */
+        @media (max-width: 900px) {
+            .recipes {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .hero {
+                padding: 35px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .search-form .btn {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* Telefon */
+        @media (max-width: 580px) {
+            .navbar {
+                padding: 15px 5%;
+            }
+
+            .brand {
+                font-size: 19px;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .container {
+                width: 92%;
+                padding-top: 25px;
+            }
+
+            .hero {
+                padding: 27px 22px;
+                border-radius: 18px;
+            }
+
+            .hero::after {
+                right: 8px;
+                top: 12px;
+                font-size: 75px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .search-panel {
+                padding: 18px;
+            }
+
+            .search-form {
+                grid-template-columns: 1fr;
+            }
+
+            .search-form .btn {
+                grid-column: auto;
+            }
+
+            .recipes {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .image-wrap {
+                height: 230px;
+            }
+
+            .section-heading h2 {
+                font-size: 23px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <h1>🍲 Retseptlar katalogi</h1>
+    <!-- Yuqori menyu -->
+    <header class="navbar">
+        <a href="{% url 'recipe_list' %}" class="brand">
+            <span class="brand-icon">🍲</span>
+            <span>Retseptlar katalogi</span>
+        </a>
 
-    <!-- Qidiruv va kategoriyalar -->
-    <form method="get">
-        <input
-            type="text"
-            name="q"
-            placeholder="Taom nomini qidiring..."
-            value="{{ search }}"
-        >
+        <nav class="nav-links">
+            <a href="{% url 'recipe_list' %}">Bosh sahifa</a>
+            <a href="{% url 'recipe_create' %}">+ Yangi retsept</a>
+            <a href="/admin/">Admin panel</a>
+        </nav>
+    </header>
 
-        <select name="category">
-            <option value="">Barcha kategoriyalar</option>
+    <main class="container">
 
-            {% for category in categories %}
-                <option value="{{ category.id }}"
-                    {% if selected_category == category.id|stringformat:"s" %}
-                        selected
-                    {% endif %}>
-                    {{ category.name }}
-                </option>
-            {% endfor %}
-        </select>
+        <!-- Kirish banneri -->
+        <section class="hero">
+            <span class="hero-label">Mazali taomlar olami</span>
+            <h1>Sevimli retseptlaringiz bir joyda!</h1>
+            <p>
+                Har kun uchun yangi g‘oyalar, mazali taomlar va
+                oson tayyorlanadigan retseptlarni kashf eting.
+            </p>
+        </section>
 
-        <button type="submit">Qidirish</button>
-    </form>
+        <!-- Qidiruv -->
+        <section class="search-panel">
+            <h2 class="search-title">🔎 O‘zingizga yoqqan taomni toping</h2>
 
-    <!-- Yangi retsept qo‘shish -->
-    <a class="add-link" href="{% url 'recipe_create' %}">
-        + Yangi retsept qo‘shish
-    </a>
+            <form method="get" class="search-form">
+                <input
+                    class="field"
+                    type="text"
+                    name="q"
+                    placeholder="Taom nomini qidiring..."
+                    value="{{ search|default:'' }}"
+                >
 
-    <!-- Retseptlar ro‘yxati -->
-    <div class="recipes">
+                <select class="field" name="category">
+                    <option value="">Barcha kategoriyalar</option>
 
-        {% for recipe in recipes %}
-            <div class="card">
+                    {% for category in categories %}
+                        <option
+                            value="{{ category.id }}"
+                            {% if selected_category == category.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ category.name }}
+                        </option>
+                    {% endfor %}
+                </select>
 
-                {% if recipe.image %}
-                    <img src="{{ recipe.image.url }}"
-                         alt="{{ recipe.title }}">
-                {% endif %}
+                <button class="btn" type="submit">
+                    🔍 Qidirish
+                </button>
+            </form>
+        </section>
 
-                <h2>{{ recipe.title }}</h2>
+        <!-- Retseptlar -->
+        <section>
+            <div class="section-heading">
+                <div>
+                    <h2>🍽️ Barcha retseptlar</h2>
+                    <p>O‘zingiz yoqtirgan taomni tanlang.</p>
+                </div>
 
-                <p>{{ recipe.description|truncatewords:20 }}</p>
-
-                <p>⏱ {{ recipe.cooking_time }} daqiqa</p>
-
-                <p>
-                    Kategoriya:
-                    {{ recipe.category|default:"Belgilanmagan" }}
-                </p>
-
-                <a class="detail-link"
-                   href="{% url 'recipe_detail' recipe.pk %}">
-                    Batafsil ko‘rish →
+                <a class="btn btn-gold" href="{% url 'recipe_create' %}">
+                    + Yangi retsept qo‘shish
                 </a>
-
             </div>
 
-        {% empty %}
-            <p>Hozircha retseptlar yo‘q. Yangi retsept qo‘shing!</p>
-        {% endfor %}
+            <div class="recipes">
 
-    </div>
+                {% for recipe in recipes %}
+                    <article class="card">
+
+                        <div class="image-wrap">
+                            {% if recipe.image %}
+                                <img
+                                    src="{{ recipe.image.url }}"
+                                    alt="{{ recipe.title }}"
+                                    loading="lazy"
+                                >
+                            {% else %}
+                                <div class="no-image">🍲</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-content">
+
+                            <span class="category-badge">
+                                {{ recipe.category|default:"Boshqa taomlar" }}
+                            </span>
+
+                            <h3>{{ recipe.title }}</h3>
+
+                            <p class="description">
+                                {{ recipe.description|default:"Bu retsept haqida hozircha tavsif kiritilmagan."|truncatewords:24 }}
+                            </p>
+
+                            <div class="card-bottom">
+                                <span class="cooking-time">
+                                    ⏱ {{ recipe.cooking_time }} daqiqa
+                                </span>
+
+                                <a
+                                    class="detail-link"
+                                    href="{% url 'recipe_detail' recipe.pk %}"
+                                >
+                                    Batafsil ko‘rish →
+                                </a>
+                            </div>
+
+                        </div>
+                    </article>
+
+                {% empty %}
+                    <div class="empty-state">
+                        <div class="empty-icon">🥘</div>
+                        <h3>Hozircha retsept topilmadi</h3>
+                        <p>
+                            Qidiruvni o‘zgartiring yoki yangi retsept qo‘shing.
+                        </p>
+                        <a class="btn" href="{% url 'recipe_create' %}">
+                            + Retsept qo‘shish
+                        </a>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>
+            <strong>🍃 Retseptlar katalogi</strong>
+            — Mazali taomlar, yoqimli kayfiyat.
+        </p>
+    </footer>
 
 </body>
 </html>

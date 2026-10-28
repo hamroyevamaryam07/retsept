@@ -1,12 +1,28 @@
-
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-jbsr+aj6^-#p-8xy$90a@(^-&q@gtorkj6&76ik&ej_&u=ld)1'
 
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+# Xavfsizlik sozlamalari
+# Render'da DJANGO_SECRET_KEY muhit o'zgaruvchisini o'rnating.
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-local-development-key-change-before-deployment"
+)
+
+# Kompyuterda True, Render'da DJANGO_DEBUG=False qilib belgilang.
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
+
+# Lokal kompyuter va Render uchun ruxsat etilgan manzillar
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0.1,localhost,.onrender.com"
+    ).split(",")
+    if host.strip()
+]
 
 
 # Ilovalar
@@ -21,15 +37,10 @@ INSTALLED_APPS = [
 ]
 
 
-# Middleware
+# Middleware — har biri faqat bir marta yoziladi
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-
-    'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # AYNAN SHU QATORNI QO‘SHING
-    'django.contrib.sessions.middleware.SessionMiddleware',
-
-
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -46,10 +57,11 @@ ROOT_URLCONF = "retsept.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -74,37 +86,60 @@ DATABASES = {
 # Parol tekshiruvi
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "UserAttributeSimilarityValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "MinimumLengthValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "CommonPasswordValidator"
+        ),
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        "NAME": (
+            "django.contrib.auth.password_validation."
+            "NumericPasswordValidator"
+        ),
     },
 ]
 
 
 # Til va vaqt
 LANGUAGE_CODE = "uz"
-
 TIME_ZONE = "Asia/Tashkent"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
+# Statik fayllar: CSS, JavaScript va rasmlar uchun
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Django 6.1 va WhiteNoise uchun statik fayllar sozlamasi
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": (
+            "whitenoise.storage."
+            "CompressedManifestStaticFilesStorage"
+        ),
+    },
+}
 
-# Eski STORAGES qismini butunlay o‘chirib, o‘rniga mana buni yozing:
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Yuklangan media fayllar uchun
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Standart asosiy kalit turi
