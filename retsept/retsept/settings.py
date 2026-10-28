@@ -98,8 +98,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# CSS va rasmlar
-STATIC_URL = "static/"
+
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Eski STORAGES qismini butunlay o‘chirib, o‘rniga mana buni yozing:
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 
 # Standart asosiy kalit turi
