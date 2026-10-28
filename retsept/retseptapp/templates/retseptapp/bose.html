@@ -1,0 +1,208 @@
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Retseptlar katalogi{% endblock %}</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fffaf3;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: #263629;
+            color: white;
+            padding: 18px 5%;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            color: #ffbd59;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #ffbd59;
+        }
+
+        main {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+        }
+
+        /* FOOTER */
+        .site-footer {
+            background: #202820;
+            color: #f5f5f5;
+            padding: 40px 20px 0;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1150px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 35px;
+            flex-wrap: wrap;
+            padding-bottom: 30px;
+        }
+
+        .footer-about,
+        .footer-links,
+        .footer-contact {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .footer-about h2,
+        .site-footer h3 {
+            color: #ffbd59;
+            margin-bottom: 15px;
+        }
+
+        .footer-about h2 {
+            font-size: 22px;
+        }
+
+        .site-footer p {
+            color: #d5d5d5;
+            line-height: 1.8;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #d5d5d5;
+            text-decoration: none;
+            margin-bottom: 10px;
+        }
+
+        .footer-links a:hover {
+            color: #ffbd59;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #465046;
+            text-align: center;
+            padding: 18px 10px;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                gap: 25px;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <a class="logo" href="/">🍲 Retseptlar katalogi</a>
+
+            <div class="nav-links">
+                <a href="/">Bosh sahifa</a>
+                <a href="/retseptlar/">Retseptlar</a>
+                <a href="/about/">Biz haqimizda</a>
+                <a href="/contact/">Bog‘lanish</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+
+            <div class="footer-about">
+                <h2>🍲 Retseptlar katalogi</h2>
+                <p>
+                    Mazali taomlar tayyorlashni biz bilan o‘rganing!
+                    Yangi retseptlar va foydali maslahatlar.
+                </p>
+            </div>
+
+            <div class="footer-links">
+                <h3>Tezkor havolalar</h3>
+                <a href="/">Bosh sahifa</a>
+                <a href="/retseptlar/">Retseptlar</a>
+                <a href="/about/">Biz haqimizda</a>
+                <a href="/contact/">Bog‘lanish</a>
+            </div>
+
+            <div class="footer-contact">
+                <h3>Biz bilan aloqa</h3>
+                <p>📧 Email: info@retseptlar.uz</p>
+                <p>🍽️ Mazali taomlar — baxtli kunlar!</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Retseptlar katalogi. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+```

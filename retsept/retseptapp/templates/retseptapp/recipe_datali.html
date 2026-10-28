@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ retsept.nom }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            color: #26352b;
+            background: #faf9f5;
+        }
+        img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+        h1, h2 { color: #24583c; }
+        .section {
+            background: white;
+            padding: 18px;
+            margin: 18px 0;
+            border-radius: 10px;
+        }
+        .matn {
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+        a { color: #b56c20; }
+    </style>
+</head>
+<body>
+
+    <a href="/">← Bosh sahifaga qaytish</a>
+
+    <h1>{{ retsept.nom|default:"Nomsiz retsept" }}</h1>
+
+    {% if retsept.rasm %}
+        <img src="{{ retsept.rasm }}" alt="{{ retsept.nom }}">
+    {% endif %}
+
+    <div class="section">
+        <h2>Taom haqida</h2>
+        <p class="matn">{{ retsept.tavsif|default:"Tavsif kiritilmagan." }}</p>
+        <p><strong>Taom turi:</strong> {{ retsept.tur|default:"Boshqa" }}</p>
+        <p><strong>Tayyorlash vaqti:</strong> {{ retsept.vaqt|default:"Ko‘rsatilmagan" }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Masalliqlar</h2>
+        <div class="matn">{{ retsept.masalliqlar|default:"Masalliqlar hali kiritilmagan." }}</div>
+    </div>
+
+    <div class="section">
+        <h2>Tayyorlash usuli</h2>
+        <div class="matn">{{ retsept.tayyorlash_usuli|default:"Tayyorlash usuli hali kiritilmagan." }}</div>
+    </div>
+
+</body>
+</html>

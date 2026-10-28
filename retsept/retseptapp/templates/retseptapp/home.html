@@ -1,0 +1,167 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#173d2b">
+    <title>Mazali — Retseptlar katalogi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'retseptapp/style.css' %}">
+</head>
+<body>
+
+<header class="navbar">
+    <a class="logo" href="/">Mazali<span>.</span></a>
+
+    <nav class="nav-links">
+        <a href="/" class="active">Bosh sahifa</a>
+        <a href="#retseptlar">Retseptlar</a>
+        <a href="#biz-haqimizda">Biz haqimizda</a>
+    </nav>
+
+    <a class="nav-button" href="#retseptlar">Retseptlarni ko‘rish ↗</a>
+</header>
+
+<main>
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> TA’M VA ILHOM MASKANI</p>
+
+            <h1>Har kuni yangi ta’m, <span>yangi ilhom.</span></h1>
+
+            <p class="hero-text">
+                Sevimli taomlaringizni toping, yangi retseptlarni o‘rganing
+                va yaqinlaringiz uchun mehr bilan mazali taomlar tayyorlang.
+            </p>
+
+            <div class="hero-actions">
+                <a class="main-button" href="#retseptlar">Retseptlarni ko‘rish <span>→</span></a>
+                <a class="text-button" href="#biz-haqimizda">Biz haqimizda ↓</a>
+            </div>
+
+            <div class="hero-note">
+                <span class="note-icon">✳</span>
+                <p><strong>Har bir taomda mehr bor.</strong><br>Ilhom bilan pishiring, mamnuniyat bilan tanovul qiling.</p>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=85" alt="Mazali taom">
+            </div>
+            <div class="image-label">
+                <span class="label-star">✳</span>
+                <div><strong>Bugungi ilhom</strong><p>Mehr bilan tayyorlangan</p></div>
+            </div>
+            <div class="floating-note">Mazali ♡</div>
+        </div>
+    </section>
+
+    <section class="recipes section" id="retseptlar">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">SIZ UCHUN TANLANDI</p>
+                <h2>Mazali retseptlar<span class="orange-dot">.</span></h2>
+            </div>
+            <p class="section-description">Oson, mazali va sinab ko‘rishga arziydigan taomlar.</p>
+        </div>
+
+        <form class="search-form" method="get" action="#retseptlar">
+            <span class="search-icon">⌕</span>
+            <input
+                type="search"
+                name="q"
+                value="{{ qidiruv }}"
+                placeholder="Taom nomi yoki masalliqlarni yozing..."
+                aria-label="Retsept qidirish"
+            >
+            {% if tanlangan_tur %}
+            <input type="hidden" name="tur" value="{{ tanlangan_tur }}">
+            {% endif %}
+            <button type="submit">Qidirish</button>
+            {% if qidiruv or tanlangan_tur %}
+            <a class="clear-search" href="/">Tozalash</a>
+            {% endif %}
+        </form>
+
+        {% if kategoriyalar %}
+        <div class="category-list">
+            <a class="category-chip {% if not tanlangan_tur %}selected{% endif %}" href="{% if qidiruv %}/?q={{ qidiruv|urlencode }}#retseptlar{% else %}/#retseptlar{% endif %}">Barchasi</a>
+            {% for tur_nomi in kategoriyalar %}
+            <a class="category-chip {% if tanlangan_tur == tur_nomi %}selected{% endif %}"
+               href="?tur={{ tur_nomi|urlencode }}{% if qidiruv %}&q={{ qidiruv|urlencode }}{% endif %}#retseptlar">
+                {{ tur_nomi }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if qidiruv %}
+        <p class="search-result">“{{ qidiruv }}” bo‘yicha qidiruv natijalari</p>
+        {% endif %}
+
+        <div class="recipe-grid">
+            {% for retsept in retseptlar %}
+            <article class="recipe-card">
+                <a class="recipe-image" href="{% url 'recipe_detail' retsept.pk %}">
+                    {% if retsept.rasm %}
+                    <img src="{{ retsept.rasm }}" alt="{{ retsept.nom }}" loading="lazy">
+                    {% else %}
+                    <div class="no-image"><span>✳</span><p>Mazali retsept</p></div>
+                    {% endif %}
+                    <span class="image-arrow">↗</span>
+                </a>
+
+                <div class="recipe-info">
+                    <span class="recipe-type">{{ retsept.tur|default:"Mazali taom" }}</span>
+                    <h3><a href="{% url 'recipe_detail' retsept.pk %}">{{ retsept.nom|default:"Mazali retsept" }}</a></h3>
+                    <p>{{ retsept.tavsif|default:"Ushbu mazali taom retseptini ko‘rib chiqing."|truncatewords:18 }}</p>
+
+                    <div class="recipe-footer">
+                        <span class="recipe-time">◷ {{ retsept.vaqt|default:"Vaqt ko‘rsatilmagan" }}</span>
+                        <a href="{% url 'recipe_detail' retsept.pk %}">Batafsil →</a>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="empty-state">
+                <span>🍲</span>
+                <h3>{% if qidiruv %}Retsept topilmadi{% else %}Hozircha retseptlar yo‘q{% endif %}</h3>
+                <p>{% if qidiruv %}Boshqa so‘z bilan qidirib ko‘ring.{% else %}Administrator panelidan birinchi retseptni qo‘shing.{% endif %}</p>
+                {% if qidiruv %}
+                <a class="main-button" href="/">Barcha retseptlar</a>
+                {% else %}
+                <a class="main-button" href="/admin/">Retsept qo‘shish →</a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="about" id="biz-haqimizda">
+        <div class="about-symbol">✳</div>
+        <p class="eyebrow">BIZNING MAQSADIMIZ</p>
+        <h2>Yaxshi taom — <span>yaxshi kayfiyat.</span></h2>
+        <p class="about-text">
+            Mazali — oshxonangizdagi ijod va ilhom manzili.
+            Yangi taomlarni o‘rganing, sevimli retseptlaringizni toping
+            va yaqinlaringizni mazali taomlar bilan xursand qiling.
+        </p>
+        <a class="main-button" href="#retseptlar">Retseptlarni kashf etish →</a>
+    </section>
+</main>
+
+<footer class="footer">
+    <a class="logo" href="/">Mazali<span>.</span></a>
+    <p>Mehr bilan pishiring. Mazali lahzalardan bahramand bo‘ling.</p>
+    <span class="copyright">© 2026 Mazali. Barcha huquqlar himoyalangan.</span>
+</footer>
+
+</body>
+</html>

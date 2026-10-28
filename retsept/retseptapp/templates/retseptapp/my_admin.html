@@ -1,0 +1,18 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retseptlar boshqaruvi</title>
+</head>
+<body>
+    <h1>🍲 Retseptlar katalogi — Admin panel</h1>
+    <p>Xush kelibsiz! Siz boshqaruv paneliga kirdingiz.</p>
+
+    <form method="post" action="{% url 'admin_logout' %}">
+        {% csrf_token %}
+        <button type="submit">Tizimdan chiqish</button>
+    </form>
+</body>
+</html>

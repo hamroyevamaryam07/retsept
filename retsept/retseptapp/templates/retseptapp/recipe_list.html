@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retseptlar katalogi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        input, select, button {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        button {
+            background: #e67e22;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-link {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        .recipes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .detail-link {
+            color: #d35400;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🍲 Retseptlar katalogi</h1>
+
+    <!-- Qidiruv va kategoriyalar -->
+    <form method="get">
+        <input
+            type="text"
+            name="q"
+            placeholder="Taom nomini qidiring..."
+            value="{{ search }}"
+        >
+
+        <select name="category">
+            <option value="">Barcha kategoriyalar</option>
+
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                    {% if selected_category == category.id|stringformat:"s" %}
+                        selected
+                    {% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Qidirish</button>
+    </form>
+
+    <!-- Yangi retsept qo‘shish -->
+    <a class="add-link" href="{% url 'recipe_create' %}">
+        + Yangi retsept qo‘shish
+    </a>
+
+    <!-- Retseptlar ro‘yxati -->
+    <div class="recipes">
+
+        {% for recipe in recipes %}
+            <div class="card">
+
+                {% if recipe.image %}
+                    <img src="{{ recipe.image.url }}"
+                         alt="{{ recipe.title }}">
+                {% endif %}
+
+                <h2>{{ recipe.title }}</h2>
+
+                <p>{{ recipe.description|truncatewords:20 }}</p>
+
+                <p>⏱ {{ recipe.cooking_time }} daqiqa</p>
+
+                <p>
+                    Kategoriya:
+                    {{ recipe.category|default:"Belgilanmagan" }}
+                </p>
+
+                <a class="detail-link"
+                   href="{% url 'recipe_detail' recipe.pk %}">
+                    Batafsil ko‘rish →
+                </a>
+
+            </div>
+
+        {% empty %}
+            <p>Hozircha retseptlar yo‘q. Yangi retsept qo‘shing!</p>
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
