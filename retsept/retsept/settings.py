@@ -5,16 +5,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Xavfsizlik sozlamalari
-# Render'da DJANGO_SECRET_KEY muhit o'zgaruvchisini o'rnating.
 SECRET_KEY = os.environ.get(
     "DJANGO_SECRET_KEY",
     "django-insecure-local-development-key-change-before-deployment"
 )
 
-# Kompyuterda True, Render'da DJANGO_DEBUG=False qilib belgilang.
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
 
-# Lokal kompyuter va Render uchun ruxsat etilgan manzillar
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.environ.get(
@@ -37,7 +34,7 @@ INSTALLED_APPS = [
 ]
 
 
-# Middleware — har biri faqat bir marta yoziladi
+# Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -50,7 +47,11 @@ MIDDLEWARE = [
 ]
 
 
+# URL sozlamalari
 ROOT_URLCONF = "retsept.urls"
+
+# Admin login sahifasiga yo'naltirish
+LOGIN_URL = "/admin/login/"
 
 
 # HTML shablonlari
@@ -119,11 +120,10 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Statik fayllar: CSS, JavaScript va rasmlar uchun
+# Statik fayllar: CSS va JavaScript
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Django 6.1 va WhiteNoise uchun statik fayllar sozlamasi
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -137,7 +137,7 @@ STORAGES = {
 }
 
 
-# Yuklangan media fayllar uchun
+# Yuklangan media fayllar
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
